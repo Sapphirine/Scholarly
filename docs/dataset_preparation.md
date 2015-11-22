@@ -2,4 +2,9 @@
 ** Import into Neo4j:
 *** Use import-csv tool. You can refer to the script for more detailed information.
 
-neo4j-import --into mag.db --nodes:Author "Authors-header.txt,Authors.txt" --nodes:ConferenceSeries "ConferenceSeries-header.txt,ConferenceSeries.txt" --nodes:FieldOfStudy "FieldsOfStudy-header.txt,FieldsOfStudy.txt" --nodes:Paper "Papers-header.txt,Papers.zip" --relationships:References "Paper-References-header.txt,PaperReferences.zip” --relationships:Written “Paper-Author-header.txt,PaperAuthorAffiliations.zip” --relationships:field “Paper-Field-header.txt,PaperKeywords.zip" --skip-bad-relationships true --delimeter "\t" --ignore-extra-columns true
+neo4j-import --into mag.db --nodes:Author "Authors-header.txt,Authors.txt" --nodes:ConferenceSeries "ConferenceSeries-header.txt,ConferenceSeries.txt" --nodes:FieldOfStudy "FieldsOfStudy-header.txt,FieldsOfStudy.txt" --nodes:Paper "Papers-header.txt,Papers.txt" --relationships:References "Paper-References-header.txt,PaperReferences.txt” --relationships:Written “Paper-Author-header.txt,PaperAuthorAffiliations.txt” --relationships:field “Paper-Field-header.txt,PaperKeywords.txt"
+
+ArnetMiner-DBLP:
+https://aminer.org/billboard/citation
+
+neo4j-import --into dblp.db --nodes:Author "dblp_author-header.csv,dblp_author.csv" --nodes:Paper "dblp_papers-header.csv,dblp_papers.csv" --relationships:Wrote "dblp_auth_paper-header.csv,dblp_auth_paper.csv" --relationships:References "dblp_ref-header.csv,dblp_ref.csv" --ignore-empty-columns true --bad-tolerance 10000000
