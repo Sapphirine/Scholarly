@@ -8,3 +8,6 @@ ArnetMiner-DBLP:
 https://aminer.org/billboard/citation
 
 neo4j-import --into dblp.db --nodes:Author "dblp_author-header.csv,dblp_author.csv" --nodes:Paper "dblp_papers-header.csv,dblp_papers.csv" --relationships:Wrote "dblp_auth_paper-header.csv,dblp_auth_paper.csv" --relationships:References "dblp_ref-header.csv,dblp_ref.csv" --ignore-empty-columns true --bad-tolerance 10000000
+
+AMiner Dataset:
+https://aminer.org/billboard/AMinerNetwork
