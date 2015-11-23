@@ -8,20 +8,19 @@ def parsePapersToCSV(papers_file):
 	dblp_papers = open("dblp_papers.csv", "w")
 	dblp_ref = open("dblp_ref.csv", "w")
 
-	paper_wr = csv.writer(dblp_papers)
+	paper_wr = csv.writer(dblp_papers, quoting=csv.QUOTE_ALL)
 	ref_wr = csv.writer(dblp_ref)
 
 	INDEX = ""
 	row = []
 	ref_line = []
 	for rline in papers_file:
-		line = rline.decode("utf-8").rstrip()
-
+		line = rline.decode("utf-8").rstrip().replace("\n","").replace("\"", "").replace('\\', "")
 		if line.startswith("#index"):
 			INDEX = line.lstrip("#index")
 			row.append(INDEX)
 		if line.startswith("#*"):
-			row.append(line.lstrip("#*").replace("\"",'_'))
+			row.append(line.lstrip("#*"))
 		if line.startswith("#c"):
 			row.append(line.lstrip("#c"))
 		if line.startswith("#t"):
@@ -30,7 +29,9 @@ def parsePapersToCSV(papers_file):
 			ref = line.lstrip("#%")
 			ref_line.append(ref)
 		if line.startswith("#!"):
-			abstract = line.lstrip("#!").replace("\n"," ")
+			abstract = line.lstrip("#!")
+			if (abstract == ""):
+				abstract = ""
 			row.append(abstract)
 		if line == "":
 			paper_wr.writerow(row)
@@ -49,12 +50,12 @@ def parseAuthorToCSV(author_file):
 	
 	dblp_authors = open("dblp_author.csv","w")
 
-	author_wr = csv.writer(dblp_authors)
+	author_wr = csv.writer(dblp_authors,quoting=csv.QUOTE_ALL)
 
 	row = []
 
 	for rline in author_file:
-		line = rline.decode("utf-8").rstrip()
+		line = rline.decode("utf-8").rstrip().replace("\n","")
 
 		if line.startswith("#index"):
 			index= line.lstrip("#index")
@@ -76,12 +77,12 @@ def parseAuthorToCSV(author_file):
 def parseAffiliationsToCSV(aff_file):
 
 	dblp_aff = open("dblp_aff.csv","w")
-	aff_wr = csv.writer(dblp_aff)
+	aff_wr = csv.writer(dblp_aff, quoting=csv.QUOTE_ALL)
 
 	aff_set = Set()
 
 	for rline in aff_file:
-		line = rline.decode("utf-8").rstrip()
+		line = rline.decode("utf-8").rstrip().replace("\n","")
 
 		if line.startswith("#index"):
 			continue
@@ -118,7 +119,7 @@ def parseAuthorAffiliationsToCSV(authors_file, aff_file):
 
 	INDEX = ""
 	for rline in authors_df:
-		line = rline.decode("utf-8").rstrip()
+		line = rline.decode("utf-8").rstrip().replace("\n","")
 
 		if line.startswith("#index"):
 			INDEX = line.lstrip("#index")
@@ -137,14 +138,14 @@ def parseAuthorAffiliationsToCSV(authors_file, aff_file):
 	dblp_aa.close()
 
 if __name__ == "__main__":
-	#papers = open(sys.argv[1], 'r')
-	#parsePapersToCSV(papers)
+	papers = open(sys.argv[1], 'r')
+	parsePapersToCSV(papers)
 
-	#authors = open(sys.argv[2], 'r')
-	#parseAuthorToCSV(authors)
+	authors = open(sys.argv[2], 'r')
+	parseAuthorToCSV(authors)
 
-	#authors = open(sys.argv[2], 'r')
-	#parseAffiliationsToCSV(authors)
+	authors = open(sys.argv[2], 'r')
+	parseAffiliationsToCSV(authors)
 
 
 	parseAuthorAffiliationsToCSV(sys.argv[2], "dblp_aff.csv")
