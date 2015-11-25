@@ -1,7 +1,10 @@
-"""Usage:
-   AMiner2CSV.py paper_file author_file author2paper_file
+"""AMiner2CSV
+
+Usage: 
+	AMiner2CSV.py <paperfile> <authorfile> <authorpaperfile>
 
 """
+
 import unicodecsv as csv
 import time
 from sets import Set
@@ -34,7 +37,7 @@ def parsePapersToCSV(papers_filename):
 	for rline in tqdm(papers_file):
 		line = rline.decode("utf-8").rstrip().replace("\n","").replace("\"", "").replace('\\', "")
 		if line.startswith("#index"):
-			INDEX = line.lstrip("#index")
+			INDEX = line.lstrip("#index").strip()
 			row.append(INDEX)
 		if line.startswith("#*"):
 			row.append(line.lstrip("#*"))
@@ -43,7 +46,7 @@ def parsePapersToCSV(papers_filename):
 		if line.startswith("#t"):
 			row.append(line.lstrip("#t"))
 		if line.startswith("#%"):
-			ref = line.lstrip("#%")
+			ref = line.lstrip("#%").strip()
 			ref_line.append(ref)
 		if line.startswith("#!"):
 			abstract = line.lstrip("#!")
@@ -79,7 +82,7 @@ def parseAuthorToCSV(author_filename):
 		line = rline.decode("utf-8").rstrip().replace("\n","")
 
 		if line.startswith("#index"):
-			index= line.lstrip("#index")
+			index= line.lstrip("#index").strip()
 			row.append(index)
 		if line.startswith("#n"):
 			name = line.lstrip("#n")
@@ -153,7 +156,7 @@ def parseAuthorAffiliationsToCSV(authors_filename, aff_filename):
 		line = rline.decode("utf-8").rstrip().replace("\n","")
 
 		if line.startswith("#index"):
-			INDEX = line.lstrip("#index")
+			INDEX = line.lstrip("#index").strip()
 		if line.startswith("#n"):
 			continue
 		if line.startswith("#a"):
@@ -175,7 +178,7 @@ def parseAuthor2PaperToCSV(author2paper_filename):
 	global A2P_OUT
 
 	a2p_file = open(author2paper_filename, 'r')
-	a2p_out = open(A2A_OUT, "w")
+	a2p_out = open(A2P_OUT, "w")
 
 	for line in tqdm(a2p_file):
 		a2p_out.write(line.replace("\t",','))
@@ -185,11 +188,10 @@ def parseAuthor2PaperToCSV(author2paper_filename):
 	
 
 if __name__ == "__main__":
-	args = docopt(__doc__)
-
-	papers_file = args['paper_file']
-	author_file = args['author_file']
-	a2p_file = args['author2paper_file']
+	arguments = docopt(__doc__)
+	papers_file = arguments['<paperfile>']
+	author_file = arguments['<authorfile>']
+	a2p_file = arguments['<authorpaperfile>']
 
 	print "Papers2CSV"
 	parsePapersToCSV(papers_file)

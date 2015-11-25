@@ -12,4 +12,4 @@ neo4j-import --into dblp.db --nodes:Author "dblp_author-header.csv,dblp_author.c
 AMiner Dataset:
 https://aminer.org/billboard/AMinerNetwork
 
-neo4j-import --into dblp.db --nodes:Author "dblp_author-header.csv,dblp_author.csv" --nodes:Paper "dblp_papers-header.csv,dblp_papers.csv" --nodes:Institute "dblp_aff-header.csv,dblp_aff.csv" --relationships:Wrote "dblp_author2paper-header.csv,dblp_author2paper.csv" --relationships:References "dblp_ref-header.csv,dblp_ref.csv" --relationships:Affiliated "dblp_author2affiliation-header.csv,dblp_author2affiliation.csv" --ignore-empty-strings true --ignore-extra-columns true --bad-tolerance 1000000
+neo4j-import --into dblp.db --nodes:Author "dblp_author-header.csv,dblp_author.csv" --nodes:Paper "dblp_papers-header.csv,dblp_papers.csv" --nodes:Institute "dblp_aff-header.csv,dblp_aff.csv" --relationships:Wrote "dblp_author2paper-header.csv,dblp_author2paper.csv" --relationships:References "dblp_ref-header.csv,dblp_ref.csv" --relationships:Affiliated "dblp_author2aff-header.csv,dblp_author2aff.csv" --ignore-empty-strings true --ignore-extra-columns true --bad-tolerance 1000000
