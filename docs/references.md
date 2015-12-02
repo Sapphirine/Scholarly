@@ -52,3 +52,5 @@
  address = {Sebastopol, Calif. Sebastopol, CA},
  isbn = {978-1-4493-5626-2}
  }
+
+@misc{1_scholar.google.com_2015,[break] author={Scholar.google.com,},[break] title={Google Scholar Metrics Help},[break] url={https://scholar.google.com/intl/en/scholar/metrics.html#metrics},[break] urldate={2015-12-1},[break] year={2015}
