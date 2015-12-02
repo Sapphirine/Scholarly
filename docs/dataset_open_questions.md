@@ -1,7 +1,8 @@
 * What institutes publish the most?
 MATCH (p:Paper)<-[w:Wrote]-(author:Author)-[r:Affiliated]->(institute:Institute) RETURN institute, count(w) ORDER BY count(w) DESC LIMIT 25
 
-* What are the top authors for each Institute?
+* What are the top authors within top institutes?
+MATCH (p:Paper)<-[:Wrote]-(a:Author)-[:Affiliated]->(i:Institute) WHERE i.instituteId="601057" RETURN a.name, count(p.title) ORDER BY count(p.title) DESC
 
 
 * Who are the top authors?
@@ -21,4 +22,12 @@ MATCH (paper1:Paper)-[r:References]->(paper2:Paper)<-[r2:Wrote]-(a:Author) RETUR
 
 * How long after their first publications do authors reach their "publication" prime? (Publication Trend among authors)
 
+* What is the rate at which top authors publish?
 
+* H-Index for top authors?
+
+* Top Collaborators for each author? (Which authors collaborate more outside of their own institute?)
+
+* Is there a relationship between Venue & # of citations? (Are papers from top conferences cited more due to exposure?)
+
+* How has the number of publications over the years changed?
