@@ -32,7 +32,7 @@ def compute_community_cluster(data, attribute):
 		nodes.append(d)
 
 	#Output GraphJSON Format - http://graphalchemist.github.io/Alchemy/#/docs
-	graph_json = {"nodes":nodes, "edges":edges }
+	graph_json = {"nodes":nodes, "links":edges }
 	return json.dumps(graph_json)
 
 @app.route("/")
