@@ -3,7 +3,7 @@ import igraph
 import json
 from py2neo import Graph as pGraph, authenticate
 from igraph import Graph as iGraph
-from flask import Flask
+from flask import Flask, render_template, url_for
 
 app = Flask(__name__)
 
@@ -27,7 +27,7 @@ def compute_community_cluster(data, attribute):
 
 	for n in ig.vs:
 		d = {"id" : n.index, 
-		      attribute : n[attribute] , 
+		      attribute : n['name'] , 
 		      "cluster": communities.membership[n.index] }
 		nodes.append(d)
 
@@ -37,7 +37,7 @@ def compute_community_cluster(data, attribute):
 
 @app.route("/")
 def hello():
-	return "Hello World!"
+	return render_template("index.html")
 
 @app.route("/papers/cluster/<int:limit>")
 def paper_clusters(limit):
@@ -49,4 +49,5 @@ def paper_clusters(limit):
 	return graph_json
 
 if __name__ == "__main__":
-	app.run(host='0.0.0.0')
+	app.run(host='0.0.0.0', port=8888)
+
