@@ -11,8 +11,8 @@ app = flask.Flask(__name__)
 authenticate("localhost:7474","neo4j", "BigData1")
 neo4j = Graph()
 @app.route("/")
-def hello():
-	return "Hello World!"
+def get_index():
+    return flask.render_template("index.html")
 
 @app.route("/test")
 def get_test():
