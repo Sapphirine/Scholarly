@@ -82,8 +82,16 @@ $("#form").submit(function(event) {
                         .attr("cy", function(d) { return d.y; })
                         .call(drag);
 
-		node.append("circle").attr("r", 15).style("fill", function(d) { return color(d.cluster); });
-		                 
+		node.append("circle").attr("r", 15).
+			style("fill", function(d) { return color(d.cluster); })
+			.on("click", function(d) {
+			if (d3.event.defaultPrevented) return;
+				isSelected = d3.select(this).classed( "selected");
+				d3.select(this).classed("selected", !isSelected);
+				$("#node-info tbody").append("<tr><th>Paper Title</th></tr>");
+				$("#node-info tbody").append("<tr><td>"+d.title+"</td></tr>");
+		});
+		  
                 force.on("tick", function() {
                     link.attr("x1", function(d) { return d.source.x; })
                         .attr("y1", function(d) { return d.source.y; })
@@ -126,6 +134,8 @@ $("#form").submit(function(event) {
                     
                         d3.select(this).select("circle").transition()
                                 .duration(750)
+			d3.selectAll(".selected").classed("selected", false);
+			$("#node-info tbody").empty();
                 });
 });
 	event.preventDefault();

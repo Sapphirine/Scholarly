@@ -20,7 +20,9 @@
 	  stroke: #fff;
 	  stroke-width: 1.5px;
 	}
-
+	.node .selected {
+		stroke: black;
+	}
 	.link {
 	  stroke: #999;
 	  stroke-opacity: .6;
@@ -41,6 +43,9 @@
 			</select>
 			<button type="submit" class="btn btn-success">Submit</button>
 		</form>
+		<table id="node-info" class="table">
+		<tbody> </tbody>
+		</table>
 		<svg id="graph"><!-- D3 JS Graph Goes Here --></svg>
 	</body>
 <script src="/static/graph.js"></script>
