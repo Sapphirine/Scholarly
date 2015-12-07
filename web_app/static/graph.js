@@ -86,10 +86,13 @@ $("#form").submit(function(event) {
 			style("fill", function(d) { return color(d.cluster); })
 			.on("click", function(d) {
 			if (d3.event.defaultPrevented) return;
-				isSelected = d3.select(this).classed( "selected");
+				isSelected = d3.select(this).classed("selected");
 				d3.select(this).classed("selected", !isSelected);
-				$("#node-info tbody").append("<tr><th>Paper Title</th></tr>");
-				$("#node-info tbody").append("<tr><td>"+d.title+"</td></tr>");
+				$("#node-info tbody").empty();
+				$("#node-info tbody").append("<tr><th>Paper Title</th><th>Cluster</th></tr>");
+				$("#node-info tbody").append("<tr><td>"+ d.title +"</td><td><a href=\"" +
+				"/" + $("#category").val() + "/" + $("#analysis").val() + "/" + $("#limitResult").val() 
+				+ "/cluster/"  + d.cluster + "\">" + d.cluster + "</a></td></tr>");
 		});
 		  
                 force.on("tick", function() {
@@ -135,7 +138,6 @@ $("#form").submit(function(event) {
                         d3.select(this).select("circle").transition()
                                 .duration(750)
 			d3.selectAll(".selected").classed("selected", false);
-			$("#node-info tbody").empty();
                 });
 });
 	event.preventDefault();
