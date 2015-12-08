@@ -30,7 +30,7 @@ def get_institutes_published_most():
 
 @app.route("/top_authors_within_top_institutes")
 def get_top_authors_within_top_institutes():
-	query = "MATCH (p:Paper)<-[:Wrote]-(a:Author)-[:Affiliated]->(i:Institute) WHERE i.instituteId=\"601057\" RETURN a.name as name, count(p.title) as num ORDER BY count(p.title) DESC"
+	query = "MATCH (p:Paper)<-[:Wrote]-(a:Author)-[:Affiliated]->(i:Institute) WHERE i.instituteId=\"601057\" RETURN a.name as name, count(p.title) as num ORDER BY count(p.title) DESC LIMIT 25"
 	data = neo4j.cypher.execute(query)
 	bardata = []
 	for author in data:
@@ -58,4 +58,3 @@ def get_top_reference():
 
 if __name__ == "__main__":
 	app.run(host='104.131.209.152')
-#	flask.url_for('static', filename='test.json')
