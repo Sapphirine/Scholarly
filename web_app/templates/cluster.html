@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	{% include "head.html" %}
+
+	<style>
+
+	.node {
+	  stroke: #fff;
+	  stroke-width: 1.5px;
+	}
+	.node .selected {
+		stroke: black;
+	}
+	.link {
+	  stroke: #999;
+	  stroke-opacity: .6;
+	}
+
+	</style>
+	<body>
+		{% include "nav.html" %}
+		<form id="form">
+			<div class="form-group">
+				<label for="limitResult">Limit Results</label>
+				<input type="text" class="form-control" id="limitResult" placeholder="100" value="100">
+			</div>
+			<select id="category" class="form-control">
+				<option value="papers">Papers</option>
+			</select>
+			<select id="analysis" class="form-control">
+				<option value="cluster">Cluster</option>
+			</select>
+			<button type="submit" class="btn btn-success">Submit</button>
+		</form>
+		<table id="node-info" class="table">
+		<tbody> </tbody>
+		</table>
+		<svg id="graph"><!-- D3 JS Graph Goes Here --></svg>
+	</body>
+	<script src="/static/graph.js"></script>
+</html>

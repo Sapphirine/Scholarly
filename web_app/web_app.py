@@ -11,8 +11,16 @@ neo4j = pGraph()
 
 
 @app.route("/")
-def hello():
+def main():
 	return render_template("index.html")
+
+@app.route("/clustering")
+def clustering():
+	return render_template("cluster.html")
+
+@app.route("/analytics")
+def analytics():
+	return render_template("analytics.html")
 
 @app.route("/papers/cluster/<int:limit>")
 def paper_clusters(limit):
@@ -38,6 +46,30 @@ def paper_clusters_cluster_info(limit, clusterId):
 
 	return render_template("cluster_info.html", data=papers_in_cluster);
 
+@app.route("/top/<category>/<int:limit>")
+def get_top(category, limit):
+	query = None
+	query_data = []
+
+	if (category == "reference"):
+		query = "MATCH (paper1:Paper)-[r:References]->(paper2:Paper) RETURN paper2.title as title, paper2.abstract as abstract, paper2.year as year, paper2.venue as venue, count(r) as num ORDER BY count(r) DESC LIMIT %d" % (limit)
+		data = neo4j.cypher.execute(query)
+		for paper in data:
+			query_data.append( { "Title" : paper.title, "Venue" : paper.venue, "Year" : paper.year, "Abstract" : paper.abstract, "RefNum" : paper.num } )
+	elif (category == "author"):
+		query = "MATCH (author:Author)-[r:Wrote]->(paper:Paper) RETURN author.keyterms as keyterms, author.name as name, count(r) as num ORDER BY count(r) DESC LIMIT %d" % (limit)
+		data = neo4j.cypher.execute(query)
+		for author in data:
+			query_data.append( { "AuthorName" : author.name, "Keyterms" : author.keyterms, "PublishNum" : author.num } )
+	elif (category == "institute"):
+		query = "MATCH (p:Paper)<-[w:Wrote]-(author:Author)-[r:Affiliated]->(institute:Institute) RETURN institute.` name` as name, count(w) as num ORDER BY count(w) DESC LIMIT %d" % (limit)
+		data = neo4j.cypher.execute(query)
+		for institute in data:
+			query_data.append( { "InstituteName" : institute.name, "PublishNum" : institute.num } )
+
+	return json.dumps(query_data)	
+
+ 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0', port=8888)
 
