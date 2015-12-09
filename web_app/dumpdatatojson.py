@@ -17,10 +17,10 @@ neo4j = pGraph()
 # for institute in data:
 # 	name.append( { "InstituteName" : institute.name, "PublishNum" : institute.num } )
 # print json.dumps(name)
-
-query = "MATCH (author:Author)-[r:Wrote]->(paper:Paper) RETURN author.keyterms as keyterms, author.name as name, count(r) as num ORDER BY count(r) DESC LIMIT 25"
+query = "MATCH (author:Author)-[r:Wrote]->(paper:Paper) RETURN author.name as name, count(r) as num ORDER BY count(r) DESC LIMIT 25"
 data = neo4j.cypher.execute(query)
 bubbledata = []
 for author in data:
-	bubbledata.append( { "AuthorName" : author.name, "Keyterms" : author.keyterms, "PublishNum" : author.num } )
-print json.dumps(bubbledata)
+	bubbledata.append( { "packageName" : author.name, "className" : author.name, "value" : author.num } )
+with open('test.json', 'w') as outfile:
+	json.dump({"children":bubbledata}, outfile)

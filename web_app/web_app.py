@@ -14,9 +14,18 @@ neo4j = Graph()
 def get_index():
     return flask.render_template("index.html")
 
-@app.route("/test")
-def get_test():
-    return flask.render_template("bar_chart.html")
+#chart
+@app.route("/top_authors_chart")
+def get_top_authors_chart():
+    return flask.render_template("top_authors.html")
+
+@app.route("/institutes_published_most_chart")
+def get_institutes_published_most_chart():
+    return flask.render_template("institutes_published_most.html")
+
+@app.route("/top_authors_within_top_institutes_chart")
+def get_top_authors_within_top_institutes_chart():
+    return flask.render_template("top_authors_within_top_institutes.html")
 
 #Data preparation
 @app.route("/institutes_published_most")
@@ -39,11 +48,11 @@ def get_top_authors_within_top_institutes():
 
 @app.route("/top_authors")
 def get_top_authors():
-	query = "MATCH (author:Author)-[r:Wrote]->(paper:Paper) RETURN author.keyterms as keyterms, author.name as name, count(r) as num ORDER BY count(r) DESC LIMIT 25"
+	query = "MATCH ((author:Author)-[r:Wrote]->(paper:Paper) RETURN author.name as name, count(r) as num ORDER BY count(r) DESC LIMIT 25"
 	data = neo4j.cypher.execute(query)
 	bubbledata = []
 	for author in data:
-		bubbledata.append( { "AuthorName" : author.name, "Keyterms" : author.keyterms, "PublishNum" : author.num } )
+		bubbledata.append( { "packageName" : author.name, "className" : author.name, "value" : author.num } )
 	return json.dumps(bubbledata)
 
 @app.route("/top_reference")
@@ -55,6 +64,6 @@ def get_top_reference():
 		bubbledata.append( { "Title" : paper.title, "Venue" : paper.venue, "Year" : paper.year, "Abstract" : paper.abstract, "RefNum" : paper.num } )
 	return json.dumps(bubbledata)
 
-
 if __name__ == "__main__":
 	app.run(host='104.131.209.152')
+	flask.url_for('static', filename='top_authors.json')
