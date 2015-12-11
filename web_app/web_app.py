@@ -2,7 +2,10 @@ import scholarly
 import json
 import urllib
 from py2neo import Graph as pGraph, authenticate
+from py2neo.packages.httpstream import http
 from flask import Flask, render_template, url_for
+
+http.socket_timeout = 9999
 
 app = Flask(__name__)
 
@@ -55,19 +58,22 @@ def get_top(category, limit):
 		query = "MATCH (paper1:Paper)-[r:References]->(paper2:Paper) RETURN paper2.title as title, paper2.abstract as abstract, paper2.year as year, paper2.venue as venue, count(r) as num ORDER BY count(r) DESC LIMIT %d" % (limit)
 		data = neo4j.cypher.execute(query)
 		for paper in data:
-			query_data.append( { "Title" : paper.title, "Venue" : paper.venue, "Year" : paper.year, "Abstract" : paper.abstract, "RefNum" : paper.num } )
+			query_data.append( { "name" : paper.title, "size" : paper.num } )
+		return json.dumps({"children": query_data})
+
 	elif (category == "author"):
-		query = "MATCH (author:Author)-[r:Wrote]->(paper:Paper) RETURN author.keyterms as keyterms, author.name as name, count(r) as num ORDER BY count(r) DESC LIMIT %d" % (limit)
+		query = "MATCH (author:Author)-[r:Wrote]->(paper:Paper) RETURN author.name as name, count(r) as num ORDER BY count(r) DESC LIMIT %d" % (limit)
 		data = neo4j.cypher.execute(query)
 		for author in data:
-			query_data.append( { "AuthorName" : author.name, "Keyterms" : author.keyterms, "PublishNum" : author.num } )
+			query_data.append( { "name" : author.name, "size" : author.num } )
+		return json.dumps({"children": query_data})
+
 	elif (category == "institute"):
 		query = "MATCH (p:Paper)<-[w:Wrote]-(author:Author)-[r:Affiliated]->(institute:Institute) RETURN institute.` name` as name, count(w) as num ORDER BY count(w) DESC LIMIT %d" % (limit)
 		data = neo4j.cypher.execute(query)
 		for institute in data:
-			query_data.append( { "InstituteName" : institute.name, "PublishNum" : institute.num } )
-
-	return json.dumps(query_data)	
+			query_data.append( { "name" : institute.name, "size" : institute.num } )
+		return json.dumps({"children": query_data})
 
  
 if __name__ == "__main__":
