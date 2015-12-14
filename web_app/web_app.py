@@ -74,7 +74,13 @@ def get_top(category, limit):
 		for institute in data:
 			query_data.append( { "name" : institute.name, "size" : institute.num } )
 		return json.dumps({"children": query_data})
-
+	elif (category == "keyword"):
+		keyword_appearances_json = open("static/keyword_appearance.json", "r")
+		kw = json.loads(keyword_appearances_json.read())
+		result = list()
+		for k in kw[:limit]:
+			result.append(k)
+		return json.dumps(result)
  
 if __name__ == "__main__":
 	app.run(host='0.0.0.0', port=8888)
