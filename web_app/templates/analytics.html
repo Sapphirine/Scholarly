@@ -1,7 +1,51 @@
 <!DOCTYPE html>
 <html>
 	{% include "head.html" %}
-
+	<style>
+	.selected_circle {
+		stroke:black;
+		stroke-width:2;
+		opacity:1.0;
+	}
+	#tooltip {
+		position: absolute;
+		width: 300px;
+		height: auto;
+		padding: 10px;
+		background-color: white;
+		opacity:1.0;
+		-webkit-border-radius: 10px;
+		-moz-border-radius: 10px;
+		border-radius: 10px;
+		border:1px solid black;
+		-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+		-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+		box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+		pointer-events: none;
+	}
+	#tooltip.hidden {
+		display: none;
+	}
+	.title {
+		margin: 0;
+		font-family: sans-serif;
+		font-weight:bold;
+		font-size: 12px;
+		line-height: 20px;
+	}
+	.value {
+		margin: 0;
+		font-family: sans-serif;
+		font-size: 12px;
+		line-height: 20px;
+	}
+	.percent {
+		margin: 0;
+		font-family: sans-serif;
+		font-size: 12px;
+		line-height: 20px;
+	}
+	</style>
 	<body>
 		{% include "nav.html" %}
 		<form id="form">
@@ -20,7 +64,12 @@
 			<button type="submit" class="btn btn-success">Submit</button>
 		</form>
 		<div class="spin" data-spin></div>
-		<svg id="viz"></svg>
-	</body>
-	<script src="/static/analytics.js"></script>
+		<div id="tooltip" class="hidden">
+			<p class="title"></p>
+			<p class="value"></p>
+			<p class="percent"></p>
+		</div>
+	<svg id="viz"></svg>
+</body>
+<script src="/static/analytics.js"></script>
 </html>
