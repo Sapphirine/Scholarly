@@ -25,21 +25,21 @@ def clustering():
 def analytics():
 	return render_template("analytics.html")
 
-@app.route("/papers/cluster/<int:limit>")
-def paper_clusters(limit):
+@app.route("/papers/cluster/<algorithm>/<int:limit>")
+def paper_clusters(algorithm, limit):
 	query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) RETURN p1.title, p2.title LIMIT %d" % (limit)
 	
 	data = neo4j.cypher.execute(query)
-	graph_json = scholarly.compute_community_cluster(data, "title")
+	graph_json = scholarly.compute_community_cluster(data, "title", algorithm)
 
 	return json.dumps(graph_json)
 
-@app.route("/papers/cluster/<int:limit>/cluster/<int:clusterId>")
-def paper_clusters_cluster_info(limit, clusterId):
+@app.route("/papers/cluster/<algorithm>/<int:limit>/cluster/<int:clusterId>")
+def paper_clusters_cluster_info(algorithm, limit, clusterId):
 	query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) RETURN p1.title, p2.title LIMIT %d" % (limit)
 	
 	data = neo4j.cypher.execute(query)
-	graph_dict = scholarly.compute_community_cluster(data, "title")
+	graph_dict = scholarly.compute_community_cluster(data, "title", algorithm)
 
 	papers_in_cluster = []
 	for n in graph_dict["nodes"]:

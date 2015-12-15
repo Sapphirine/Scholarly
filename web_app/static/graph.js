@@ -37,7 +37,7 @@ var container = svg.append("g");
 
 $("#form").submit(function(event) {
 
-	d3.json("/" + $("#category").val() + "/" + $("#analysis").val() + "/" + $("#limitResult").val() , function(error, graph) {
+	d3.json("/" + $("#category").val() + "/" + $("#analysis").val() + "/" + $("#algorithm").val() + "/" + $("#limitResult").val() , function(error, graph) {
 		if (error) throw error;
 
 		svg.selectAll("*").remove();
