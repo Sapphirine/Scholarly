@@ -58,7 +58,8 @@ def get_top(category, limit):
 		query = "MATCH (paper1:Paper)-[r:References]->(paper2:Paper) RETURN paper2.title as title, paper2.abstract as abstract, paper2.year as year, paper2.venue as venue, count(r) as num ORDER BY count(r) DESC LIMIT %d" % (limit)
 		data = neo4j.cypher.execute(query)
 		for paper in data:
-			query_data.append( { "name" : paper.title, "size" : paper.num } )
+			print paper.year
+			query_data.append( { "name" : paper.title, "size" : paper.num, "year": paper.year} )
 		return json.dumps({"children": query_data})
 
 	elif (category == "author"):
@@ -83,5 +84,5 @@ def get_top(category, limit):
 		return json.dumps(result)
  
 if __name__ == "__main__":
-	app.run(host='104.131.209.152', port=8080)
+	app.run(host='0.0.0.0', port=8888)
 

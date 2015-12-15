@@ -66,9 +66,6 @@ d3.json("/" + $("#analysis").val() + "/" + $("#category").val() + "/" + $("#limi
 				node.on("mouseout", mouseout);
 			d3.select(self.frameElement).style("height", diameter + "px");
 
-
-
-
 			break;
 			case "author":
 			var diameter = 960;
@@ -114,9 +111,6 @@ d3.json("/" + $("#analysis").val() + "/" + $("#category").val() + "/" + $("#limi
 					d3.select("#tooltip").classed("hidden", false);
 				});
 				node.on("mouseout", mouseout);
-
-
-
 
 			break;
 			case "institute":
