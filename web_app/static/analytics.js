@@ -5,8 +5,7 @@ $("#form").submit(function(event) {
 	$('.spin').spin('show');
 	d3.select("#viz").selectAll("*").remove();
 
-//d3.json("/" + $("#analysis").val() + "/" + $("#category").val() + "/" + $("#limitResult").val(), function(error, json) {
-	d3.json("/static/test.json", function(error, json) {
+d3.json("/" + $("#analysis").val() + "/" + $("#category").val() + "/" + $("#limitResult").val(), function(error, json) {
 		switch($("#category").val()){
 			case "reference":
 			var diameter = 960;
