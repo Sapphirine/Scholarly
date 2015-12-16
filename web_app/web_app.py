@@ -24,12 +24,23 @@ def analytics():
 
 @app.route("/papers/cluster/<int:limit>")
 def paper_clusters(limit):
-	query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) RETURN p1.title, p2.title LIMIT %d" % (limit)
+	query = "MATCH (p1:Paper)-[r:Wrote]->(p2:Paper) RETURN p1.title, p2.title LIMIT %d" % (limit)
 	
 	data = neo4j.cypher.execute(query)
 	graph_json = scholarly.compute_community_cluster(data, "title")
 
 	return json.dumps(graph_json)
+
+@app.route("/papers/cluster/<int:limit>/<keyword>")
+def paper_clusters_keyword(limit, keyword):
+        query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) WHERE p1.title CONTAINS '%s' RETURN p1.title, p2.title LIMIT %d" % (keyword, limit)
+	
+	query_alt = "MATCH (p1:Paper)<-[:Wrote]-(a:Author)-[a:Wrote]->(p2:Paper) WHERE p1.title CONTAINS '%s' RETURN p1,a, p2 LIMIT %d" % (keyword, limit)
+
+        data = neo4j.cypher.execute(query)
+        graph_json = scholarly.compute_community_cluster(data, "title")
+
+        return json.dumps(graph_json)
 
 @app.route("/papers/cluster/<int:limit>/cluster/<int:clusterId>")
 def paper_clusters_cluster_info(limit, clusterId):
@@ -71,5 +82,5 @@ def get_top(category, limit):
 
  
 if __name__ == "__main__":
-	app.run(host='0.0.0.0', port=8888)
+	app.run(host='0.0.0.0', port=8801)
 

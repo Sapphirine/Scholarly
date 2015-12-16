@@ -36,8 +36,18 @@ var container = svg.append("g");
 
 
 $("#form").submit(function(event) {
+	
+	console.log("in submit");
 
-	d3.json("/" + $("#category").val() + "/" + $("#analysis").val() + "/" + $("#limitResult").val() , function(error, graph) {
+	var  navpath = "/" + $("#category").val() + "/" + $("#analysis").val() + "/" + $("#limitResult").val();
+	if ( $("#keyword").val().length == 0) {
+		navpath = "/" + $("#category").val() + "/" + $("#analysis").val() + "/" + $("#limitResult").val();
+	} else {
+		navpath = "/" + $("#category").val() + "/" + $("#analysis").val() + "/" + $("#limitResult").val() + "/" + $("#keyword").val();
+	}        
+ 	console.log(navpath);
+	
+	d3.json(navpath, function(error, graph) {
 		if (error) throw error;
 
 		svg.selectAll("*").remove();
