@@ -36,8 +36,12 @@ var container = svg.append("g");
 
 
 $("#form").submit(function(event) {
+	var query_url = "/" + $("#category").val() + "/" + $("#analysis").val() + "/" + $("#algorithm").val() + "/" + $("#limitResult").val();
 
-	d3.json("/" + $("#category").val() + "/" + $("#analysis").val() + "/" + $("#algorithm").val() + "/" + $("#limitResult").val() , function(error, graph) {
+	if ($("#keyword").val() != "")
+		query_url += "/" + $("#keyword").val();
+
+	d3.json(query_url, function(error, graph) {
 		if (error) throw error;
 
 		svg.selectAll("*").remove();

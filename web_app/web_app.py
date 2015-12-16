@@ -26,8 +26,14 @@ def analytics():
 	return render_template("analytics.html")
 
 @app.route("/papers/cluster/<algorithm>/<int:limit>")
-def paper_clusters(algorithm, limit):
-	query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) RETURN p1.title, p2.title LIMIT %d" % (limit)
+@app.route("/papers/cluster/<algorithm>/<int:limit>/<keyword>")
+def paper_clusters(algorithm, limit, keyword=""):
+	
+	query = None
+	if (keyword == ""):
+		query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) RETURN p1.title, p2.title LIMIT %d" % (limit)
+	else:
+		query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) WHERE p1.title = %s OR p2.title = %s RETURN p1.title, p2.title LIMIT %d" % (keyword, keyword, limit)
 	
 	data = neo4j.cypher.execute(query)
 	graph_json = scholarly.compute_community_cluster(data, "title", algorithm)
