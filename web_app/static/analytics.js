@@ -142,7 +142,7 @@ d3.json("/" + $("#analysis").val() + "/" + $("#category").val() + "/" + $("#limi
 					var yPosition = d3.event.pageY - 60;
 
 					var title = "Institute:" + d.name;
-					var text1 = "Reference num: " + d.size;  
+					var text1 = "Published num: " + d.size;  
 
 					d3.select("#tooltip")
 					.style("left", xPosition + "px")
