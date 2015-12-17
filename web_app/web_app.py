@@ -28,13 +28,28 @@ def analytics():
 @app.route("/papers/cluster/<algorithm>/<int:limit>")
 @app.route("/papers/cluster/<algorithm>/<int:limit>/<keyword>")
 def paper_clusters(algorithm, limit, keyword=""):
+
+        query = None
+        if (keyword == ""):
+                query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) RETURN p1.title, p2.title LIMIT %d" % (limit)
+        else:
+                query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) WHERE p1.title CONTAINS '%s' OR p2.title CONTAINS '%s' RETURN p1.title, p2.title LIMIT %d" % (keyword, keyword, limit)
+
+        print query
+        data = neo4j.cypher.execute(query)
+        graph_json = scholarly.compute_community_cluster(data, "title", algorithm)
+
+        return json.dumps(graph_json)
+@app.route("/authors/cluster/<algorithm>/<int:limit>")
+@app.route("/authors/cluster/<algorithm>/<int:limit>/<keyword>")
+def author_clusters(algorithm, limit, keyword=""):
 	
 	query = None
 	if (keyword == ""):
-		query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) RETURN p1.title, p2.title LIMIT %d" % (limit)
+		query = "MATCH (a1:Author)-[:Wrote]-(p:Paper)-[:Wrote]-(a2:Author) RETURN a1.name AS source, a2.name AS target LIMIT %d" % (limit)
 	else:
-		query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) WHERE p1.title CONTAINS '%s' OR p2.title CONTAINS '%s' RETURN p1.title, p2.title LIMIT %d" % (keyword, keyword, limit)
-
+		query = "MATCH (a1:Author)-[:Wrote]-(p:Paper)-[:Wrote]-(a2:Author) WHERE '%s' IN a1.keyterms AND '%s' IN a2.keyterms RETURN a1.name AS source, a2.name AS target LIMIT %d" % (keyword, keyword, limit)
+	
 	print query	
 	data = neo4j.cypher.execute(query)
 	graph_json = scholarly.compute_community_cluster(data, "title", algorithm)
@@ -91,5 +106,5 @@ def get_top(category, limit):
 		return json.dumps(result)
  
 if __name__ == "__main__":
-	app.run(host='0.0.0.0', port=8801)
+	app.run(host='0.0.0.0', port=8888)
 
