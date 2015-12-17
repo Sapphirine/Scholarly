@@ -33,8 +33,9 @@ def paper_clusters(algorithm, limit, keyword=""):
 	if (keyword == ""):
 		query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) RETURN p1.title, p2.title LIMIT %d" % (limit)
 	else:
-		query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) WHERE p1.title = %s OR p2.title = %s RETURN p1.title, p2.title LIMIT %d" % (keyword, keyword, limit)
-	
+		query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) WHERE p1.title CONTAINS '%s' OR p2.title CONTAINS '%s' RETURN p1.title, p2.title LIMIT %d" % (keyword, keyword, limit)
+
+	print query	
 	data = neo4j.cypher.execute(query)
 	graph_json = scholarly.compute_community_cluster(data, "title", algorithm)
 
@@ -90,5 +91,5 @@ def get_top(category, limit):
 		return json.dumps(result)
  
 if __name__ == "__main__":
-	app.run(host='0.0.0.0', port=8888)
+	app.run(host='0.0.0.0', port=8801)
 
