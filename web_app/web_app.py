@@ -56,6 +56,21 @@ def author_clusters(algorithm, limit, keyword=""):
 
 	return json.dumps(graph_json)
 
+@app.route("/authors/cluster/<algorithm>/<int:limit>/cluster/<int:clusterId>")
+def author_clusters_cluster_info(algorithm, limit, clusterId):
+	
+	graph_dict = json.loads(author_clusters(algorithm, limit))
+        
+	authors_in_cluster = []
+        for n in graph_dict["nodes"]:
+        	if (n["cluster"] == clusterId):
+			keepcharacters_url = (' ')
+			new_name_url = "".join(c for c in n["title"].encode('utf-8') if c.isalnum() or c in keepcharacters_url).rstrip()
+			keepcharacters_title = (' ', '.', '~', '_')
+                        new_name_title = "".join(c for c in n["title"].encode('utf-8') if c.isalnum() or c in keepcharacters_title).rstrip()
+                        authors_in_cluster.append({"title" : new_name_title,
+                        "url" : "http://dblp.uni-trier.de/search/publ?q=" + urllib.quote(new_name_url)})
+        return render_template("cluster_info.html", data=authors_in_cluster);
 @app.route("/papers/cluster/<algorithm>/<int:limit>/cluster/<int:clusterId>")
 def paper_clusters_cluster_info(algorithm, limit, clusterId):
 	query = "MATCH (p1:Paper)-[r:References]->(p2:Paper) RETURN p1.title, p2.title LIMIT %d" % (limit)
